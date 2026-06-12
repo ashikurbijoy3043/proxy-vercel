@@ -11,6 +11,31 @@ if (typeof window !== 'undefined') {
 
 const { useState, useEffect, useRef } = React;
 
+// Premium custom SweetAlert2 popup wrapper
+const showSwalAlert = (title, text, icon = 'info') => {
+    let iconColor = 'var(--primary)';
+    if (icon === 'error') iconColor = 'var(--danger)';
+    if (icon === 'success') iconColor = 'var(--success)';
+    if (icon === 'warning') iconColor = 'var(--warning)';
+
+    Swal.fire({
+        title: title,
+        text: text,
+        icon: icon,
+        iconColor: iconColor,
+        background: '#0a122a',
+        color: '#fff',
+        confirmButtonText: 'Acknowledge',
+        customClass: {
+            popup: 'cyber-swal-popup',
+            title: 'cyber-swal-title',
+            htmlContainer: 'cyber-swal-html',
+            confirmButton: 'cyber-swal-confirm-btn'
+        },
+        buttonsStyling: false
+    });
+};
+
 function App() {
     const [activeTab, setActiveTab] = useState('home');
     const [udid, setUdid] = useState('');
@@ -114,12 +139,20 @@ function App() {
         const isSafari = /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 
         if (!isIOS) {
-            alert("Sorry, automatic retrieval is only supported on iOS devices (iPhone, iPad).");
+            showSwalAlert(
+                "Device Mismatch",
+                "Sorry, automatic retrieval is only supported on iOS devices (iPhone, iPad).",
+                "warning"
+            );
             return;
         }
 
         if (!isSafari) {
-            alert("Please open this website in Safari on your iPhone to download the profile and retrieve your UDID correctly.");
+            showSwalAlert(
+                "Safari Required",
+                "Please open this website in Safari on your iPhone to download the profile and retrieve your UDID correctly.",
+                "warning"
+            );
             return;
         }
 
