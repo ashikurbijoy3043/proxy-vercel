@@ -216,7 +216,7 @@ async function fetchDashboardData(session) {
             nodes,
             ssl_href: sslDownloadHref,
             announcement: annTitle || annDesc ? {
-                image: 'ios_proxy_banner.png',
+                image: '/ios_proxy_banner.png',
                 title: annTitle || 'IOS PROXY',
                 desc: annDesc
             } : null
