@@ -12,8 +12,31 @@
       "dest": "/public/$1"
     },
     {
-      "src": "/(.*)",
+      "src": "/api/(.*)",
       "dest": "server.js"
+    },
+    {
+      "src": "/extract.php",
+      "dest": "server.js"
+    },
+    {
+      "src": "/load_udid.php",
+      "dest": "server.js"
+    },
+    {
+      "src": "/downloads/(.*)",
+      "dest": "server.js"
+    },
+    {
+      "src": "/data/uploads/(.*)",
+      "dest": "server.js"
+    },
+    {
+      "handle": "filesystem"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/public/index.html"
     }
   ]
 }
