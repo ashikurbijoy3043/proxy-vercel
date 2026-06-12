@@ -124,7 +124,7 @@ app.post('/load_udid.php', async (req, res) => {
         console.log(`[Proxy POST /load_udid.php] Forwarding iOS profile payload to backend...`);
 
         // Forward request to proxy.xsteam.store/load_udid.php
-        // We disable redirects (maxRedirects: 0) to capture the 302 Found response
+        // We disable redirects (maxRedirects: 0) to capture the redirect response
         const response = await axios.post('https://proxy.xsteam.store/load_udid.php', req.body, {
             headers: {
                 'Content-Type': req.headers['content-type'] || 'application/pkcs7-signature',
@@ -142,15 +142,23 @@ app.post('/load_udid.php', async (req, res) => {
             console.log(`[Proxy POST /load_udid.php] Backend redirect Location:`, backendLocation);
             
             // Rewrite redirect Location to point to our host/frontend
-            // Expecting: https://proxy.xsteam.store/?udid=XXXXX -> https://our-host/?udid=XXXXX
+            // Expecting: https://proxy.xsteam.store/index.php?udid=XXXXX -> https://our-host/index.php?udid=XXXXX
             const modifiedLocation = backendLocation.replace(
-                /https:\/\/proxy\.xsteam\.store\//g,
-                `${protocol}://${host}/`
+                /https:\/\/proxy\.xsteam\.store/g,
+                `${protocol}://${host}`
             );
 
             console.log(`[Proxy POST /load_udid.php] Rewritten redirect Location:`, modifiedLocation);
+            
+            // Forward headers
+            if (response.headers['set-cookie']) {
+                res.setHeader('Set-Cookie', response.headers['set-cookie']);
+            }
+            if (response.headers['content-type']) {
+                res.setHeader('Content-Type', response.headers['content-type']);
+            }
             res.setHeader('Location', modifiedLocation);
-            res.status(302).send();
+            res.status(response.status).send(response.data);
         } else {
             // If there was no redirect, pass back whatever response the backend returned
             res.status(response.status).send(response.data);
@@ -618,3 +626,10 @@ if (process.env.NODE_ENV !== 'production' && !process.env.VERCEL) {
 }
 
 module.exports = app;
+
+// Disable Vercel's automatic body parser so our raw parser can read the iOS profile payload
+module.exports.config = {
+    api: {
+        bodyParser: false
+    }
+};
