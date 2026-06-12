@@ -1,3 +1,4 @@
+// IOS PROXY - Client Portal v1.0.1 (Last Updated: 2026-06-12)
 // Disable all console logs to prevent inspection
 if (typeof window !== 'undefined') {
     window.console = {
