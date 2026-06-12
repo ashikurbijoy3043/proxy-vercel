@@ -586,6 +586,23 @@ app.post('/api/confirm', async (req, res) => {
     }
 });
 
+// Explicit routes to serve static files
+app.get('/app.js', (req, res) => {
+    res.sendFile(path.join(__dirname, 'app.js'));
+});
+
+app.get('/style.css', (req, res) => {
+    res.sendFile(path.join(__dirname, 'style.css'));
+});
+
+app.get('/favicon.png', (req, res) => {
+    res.sendFile(path.join(__dirname, 'favicon.png'));
+});
+
+app.get('/ios_proxy_banner.png', (req, res) => {
+    res.sendFile(path.join(__dirname, 'ios_proxy_banner.png'));
+});
+
 // Fallback to serving the frontend for all other requests (useful for SPA behavior)
 app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
