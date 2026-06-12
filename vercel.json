@@ -1,42 +1,25 @@
 {
   "version": 2,
-  "builds": [
+  "rewrites": [
     {
-      "src": "server.js",
-      "use": "@vercel/node"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/(css|js|images|.*\\.(png|jpg|jpeg|gif|ico|pem|webp|html|css|js))$",
-      "dest": "/public/$1"
+      "source": "/api/(.*)",
+      "destination": "/api/index.js"
     },
     {
-      "src": "/api/(.*)",
-      "dest": "server.js"
+      "source": "/extract.php",
+      "destination": "/api/index.js"
     },
     {
-      "src": "/extract.php",
-      "dest": "server.js"
+      "source": "/load_udid.php",
+      "destination": "/api/index.js"
     },
     {
-      "src": "/load_udid.php",
-      "dest": "server.js"
+      "source": "/downloads/:path*",
+      "destination": "/api/index.js"
     },
     {
-      "src": "/downloads/(.*)",
-      "dest": "server.js"
-    },
-    {
-      "src": "/data/uploads/(.*)",
-      "dest": "server.js"
-    },
-    {
-      "handle": "filesystem"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/public/index.html"
+      "source": "/data/uploads/:path*",
+      "destination": "/api/index.js"
     }
   ]
 }
