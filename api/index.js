@@ -62,7 +62,7 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 
 // Serve static files from the root folder
-app.use(express.static(path.join(__dirname)));
+app.use(express.static(path.join(__dirname, '..')));
 
 // Use JSON body parser for general API requests
 app.use(express.json());
@@ -588,7 +588,7 @@ app.post('/api/confirm', async (req, res) => {
 
 // Fallback to serving the frontend for all other requests (useful for SPA behavior)
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'index.html'));
+    res.sendFile(path.join(__dirname, '..', 'index.html'));
 });
 
 if (process.env.NODE_ENV !== 'production' && !process.env.VERCEL) {
